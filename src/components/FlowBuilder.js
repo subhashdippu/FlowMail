@@ -1,69 +1,85 @@
-import React from "react";
-import ReactFlow, { Controls, useNodesState, useEdgesState } from "reactflow";
+import React, { useState } from "react";
+import ReactFlow, {
+  Controls,
+  useNodesState,
+  useEdgesState,
+  // Background,
+} from "reactflow";
 import "reactflow/dist/style.css";
 import { Plus } from "lucide-react";
+import SourceBlockModal from "./SourceBlockModal";
 
-const AddLeadSourceNode = () => {
+// Add Lead Source Node
+const AddLeadSourceNode = ({ data }) => {
   return (
-    <div className="bg-white border rounded-md shadow-md px-6 py-4 w-64 text-center text-sm">
+    <div
+      onClick={data.onClick}
+      className="bg-white border rounded-md shadow-md px-6 py-4 w-64 text-center text-sm"
+    >
       <div className="text-lg font-light">+</div>
-      <div className="font-medium text-gray-800">Add Lead Source</div>
+      <div className="font-medium text-gray-800 cursor-pointer">
+        Add Lead Source
+      </div>
       <div className="text-gray-500">Click to add leads from List or CRM</div>
     </div>
   );
 };
 
-const SequenceStartPointNode = () => {
-  return (
-    <div className="bg-white border rounded-md shadow-md px-6 py-4 w-64 text-center text-sm font-medium text-gray-800">
-      Sequence Start Point
-    </div>
-  );
-};
+// Sequence Start Node
+const SequenceStartPointNode = () => (
+  <div className="bg-white border rounded-md shadow-md px-6 py-4 w-64 text-center text-sm font-medium text-gray-800">
+    Sequence Start Point
+  </div>
+);
 
-const PlusNode = () => {
-  return (
-    <div className="w-7 h-7 flex items-center justify-center border-2 border-blue-500 rounded-md text-blue-500 cursor-pointer">
-      <Plus size={16} />
-    </div>
-  );
-};
+// Plus Node
+const PlusNode = () => (
+  <div className="w-7 h-7 flex items-center justify-center border-2 border-blue-500 rounded-md text-blue-500 cursor-pointer bg-white shadow">
+    <Plus size={16} />
+  </div>
+);
 
+// Node types mapping
 const nodeTypes = {
   addLeadSource: AddLeadSourceNode,
   sequenceStart: SequenceStartPointNode,
   plusNode: PlusNode,
 };
 
-const initialNodes = [
-  {
-    id: "1",
-    type: "addLeadSource",
-    position: { x: 200, y: 40 },
-    data: {},
-  },
-  {
-    id: "2",
-    type: "sequenceStart",
-    position: { x: 200, y: 200 },
-    data: {},
-  },
-  {
-    id: "3",
-    type: "plusNode",
-    position: { x: 310, y: 340 },
-    data: {},
-  },
-];
-
-const initialEdges = [
-  { id: "e1-2", source: "1", target: "2", type: "smoothstep" },
-  { id: "e2-3", source: "2", target: "3", type: "smoothstep" },
-];
-
 export default function FlowBuilder() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const initialNodes = [
+    {
+      id: "1",
+      type: "addLeadSource",
+      position: { x: 200, y: 40 },
+      data: { onClick: openModal },
+    },
+    {
+      id: "2",
+      type: "sequenceStart",
+      position: { x: 200, y: 200 },
+      data: {},
+    },
+    {
+      id: "3",
+      type: "plusNode",
+      position: { x: 310, y: 340 },
+      data: {},
+    },
+  ];
+
+  const initialEdges = [
+    { id: "e1-2", source: "1", target: "2", type: "smoothstep" },
+    { id: "e2-3", source: "2", target: "3", type: "smoothstep" },
+  ];
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   return (
     <div style={{ height: "84vh" }}>
@@ -79,6 +95,7 @@ export default function FlowBuilder() {
         </button>
       </div>
 
+      {/* <div className="w-full h-screen"> */}
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -88,7 +105,11 @@ export default function FlowBuilder() {
         fitView
       >
         <Controls />
+        {/* <Background /> */}
       </ReactFlow>
+
+      {/* Modal Component */}
+      {isModalOpen && <SourceBlockModal onClose={closeModal} />}
     </div>
   );
 }
