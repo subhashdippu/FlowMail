@@ -1,7 +1,12 @@
 import React from "react";
+import FlowBuilder from "../components/FlowBuilder";
 
 function HomePage() {
-  return <div>Subhash Prasad(Ganesh)</div>;
+  return (
+    <div>
+      <FlowBuilder />
+    </div>
+  );
 }
 
 export default HomePage;
