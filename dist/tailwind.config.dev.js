@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
@@ -6,9 +8,9 @@ module.exports = {
         green: "#19207d",
         red: "#FF6868",
         secondary: "#555",
-        prigmayBG: "#FCFCFC",
-      },
-    },
+        prigmayBG: "#FCFCFC"
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };
